@@ -19,23 +19,30 @@ namespace GestaoOficina.Domain.Services
             _agendamentoRepository = agendamentoRepository;
         }
 
-        public void ValidarDadosEntradaAgendamento(DateTime dataAgendamento, TipoServico? tipoServico)
+        public void ValidarDadosEntradaAgendamento(DateTime? dataAgendamento, TipoServico? tipoServico)
         {
             if (dataAgendamento.Equals(DateTime.MinValue))
                 throw new ArgumentNullException(nameof(dataAgendamento));
             else if (tipoServico is null)
                 throw new ArgumentNullException(nameof(tipoServico));
         }
+        public void ValidarDadosEntradaAlteracaoStatus(Guid? idAgendamento, StatusAgendamento? status)
+        {
+            if (idAgendamento == Guid.Empty)
+                throw new ArgumentNullException(nameof(idAgendamento));
+            else if (status == null)
+                throw new ArgumentNullException(nameof(status));
+        }
 
         public async Task ValidarDisponibilidadeDiaAgendamento(Guid idOficina, DateTime dataAgendamento, TipoServico tipoServico)
         {
-            if (!dataAgendamento.EhDiaUtil())
-                throw new Exception("Não é possível marcar um agendamento aos fins de semana");
+            if (!dataAgendamento.EhDiaUtil() && !dataAgendamento.EhValidaPeloLimite())
+                throw new Exception("Data inválida para agendamento. Tente agendar para um dia útil com uma semana de antecedencia");
 
             try
             {
                 var cargaAtualAgendamento = ListarCargaDiariaJaPreenchida(dataAgendamento, idOficina);
-                var capacidadeAgndamento = _agendamentoRepository.ObterCargaServicoEOficina(tipoServico,idOficina);
+                var capacidadeAgndamento = _agendamentoRepository.ObterCargaServicoEOficina(tipoServico, idOficina);
 
                 await Task.WhenAll(cargaAtualAgendamento, capacidadeAgndamento);
 
@@ -61,15 +68,87 @@ namespace GestaoOficina.Domain.Services
             return _agendamentoRepository.ListarCargaDiariaJaPreenchida(idOficina, dataMinimaConsulta, dataMaximaConsulta);
         }
 
-        private int CalcularCapacidadeBonus (DateTime data, int capacidadeOficina)
+        public int CalcularCapacidadeBonus(DateTime data, int capacidadeOficina)
         {
-            if(data.EhDiaDeAltaDemanda())
+            if (data.EhDiaDeAltaDemanda())
             {
-                var capacidadeBonus = (int)Math.Floor(capacidadeOficina * 1.3);
+                var capacidadeBonus = (int)Math.Floor(capacidadeOficina * 0.3);
                 return capacidadeBonus;
             }
 
             return 0;
+        }
+
+        public async Task PreencherRelatorioAgendamento(Guid idAgendamento, StatusAgendamento status)
+        {
+            if (status == StatusAgendamento.EmAndamento)
+            {
+                await _agendamentoRepository.InserirRelatorioAgendamento(idAgendamento, DateTime.Now);
+            }
+            else if (status == StatusAgendamento.Finalizado)
+            {
+                await _agendamentoRepository.AlterarRelatorioAgendamento(idAgendamento, DateTime.Now);
+            }
+        }
+
+        public async Task<List<RelatorioDto>> ComporRelatorioAgendamento(List<RelatorioAgendamentoDto> agendamentos)
+        {
+            var agendamentosPorDiaDictionary = AgruparAgendamentoPorDiaDictionary(agendamentos);
+
+            var relatorios = new List<RelatorioDto>();
+
+            foreach (var agnts in agendamentosPorDiaDictionary)
+            {
+                var totalAgendamentos = agnts.Value.Count();
+                var agendamentosFinalizados = agnts.Value.Count(x => x.Status == StatusAgendamento.Finalizado);
+                var agendamentosNaoRealizados = agnts.Value.Count(x => x.Status == StatusAgendamento.NaoRealizado);
+                var agendamentosEmAndamento = agnts.Value.Count(x => x.Status == StatusAgendamento.EmAndamento);
+
+                var historicoAgendamentoList = new List<HistoricoAgendamentoDto>();
+                foreach (var historico in agnts.Value)
+                {
+                    historicoAgendamentoList.Add(new HistoricoAgendamentoDto
+                    {
+                        IdAgendamento = historico.Id,
+                        Servico = historico.Servico,
+                        Status = historico.Status,
+                        DuracaoEmMinutos = (int)(historico.DataFim - historico.DataInicio).TotalMinutes
+                    });
+                }
+
+                relatorios.Add(new RelatorioDto
+                {
+                    TotalAgendamentos = totalAgendamentos,
+                    AgendamentosFinalizados = agendamentosFinalizados,
+                    AgendamentosNaoRealizados = agendamentosNaoRealizados,
+                    AgendamentosEmProcesso = agendamentosEmAndamento,
+                    Agendamentos = historicoAgendamentoList,
+                    Data = agnts.Key
+
+                });
+            }
+
+            return relatorios;
+        }
+
+        private Dictionary<DateTime, List<RelatorioAgendamentoDto>> AgruparAgendamentoPorDiaDictionary(List<RelatorioAgendamentoDto> agendamentos)
+        {
+            var agendamentosPorDia = new Dictionary<DateTime, List<RelatorioAgendamentoDto>>();
+            foreach (var agendamento in agendamentos)
+            {
+                if (agendamentosPorDia.ContainsKey(agendamento.DataAgendamento.Date))
+                {
+                    var agList = agendamentosPorDia.FirstOrDefault(x => x.Key == agendamento.DataAgendamento.Date);
+
+                    agList.Value.Add(agendamento);
+                }
+                else
+                {
+                    agendamentosPorDia.Add(agendamento.DataAgendamento.Date, new List<RelatorioAgendamentoDto> { agendamento });
+                }
+            }
+
+            return agendamentosPorDia;
         }
     }
 }

@@ -3,15 +3,17 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 17
 VisualStudioVersion = 17.0.32014.148
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "GestaoOficina.Api", "GestaoOficina.Api\GestaoOficina.Api.csproj", "{AC2DB34F-4F07-46EF-9CB4-260E156B7AF6}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "GestaoOficina.Api", "GestaoOficina.Api\GestaoOficina.Api.csproj", "{AC2DB34F-4F07-46EF-9CB4-260E156B7AF6}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "GestaoOficina.Application", "GestaoOficina.Application\GestaoOficina.Application.csproj", "{23C20475-8FDE-4FFD-B9D1-0A924D499CFA}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "GestaoOficina.Application", "GestaoOficina.Application\GestaoOficina.Application.csproj", "{23C20475-8FDE-4FFD-B9D1-0A924D499CFA}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "GestaoOficina.CrossCutting", "GestaoOficina.CrossCutting\GestaoOficina.CrossCutting.csproj", "{C26AE783-FF91-4918-97C9-3A861442184C}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "GestaoOficina.CrossCutting", "GestaoOficina.CrossCutting\GestaoOficina.CrossCutting.csproj", "{C26AE783-FF91-4918-97C9-3A861442184C}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "GestaoOficina.Domain", "GestaoOficina.Domain\GestaoOficina.Domain.csproj", "{14F7CFBF-287C-4B58-A327-56E389D09CE7}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "GestaoOficina.Domain", "GestaoOficina.Domain\GestaoOficina.Domain.csproj", "{14F7CFBF-287C-4B58-A327-56E389D09CE7}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "GestaoOficina.Infrastructure", "GestaoOficina.Infrastructure\GestaoOficina.Infrastructure.csproj", "{854594B3-4545-41D9-B7F7-461F04748DBD}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "GestaoOficina.Infrastructure", "GestaoOficina.Infrastructure\GestaoOficina.Infrastructure.csproj", "{854594B3-4545-41D9-B7F7-461F04748DBD}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "GestaoOficina.Tests", "GestaoOficina.Tests\GestaoOficina.Tests.csproj", "{04562C5B-D503-4088-9FF7-4C80ED4B48BB}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -39,6 +41,10 @@ Global
 		{854594B3-4545-41D9-B7F7-461F04748DBD}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{854594B3-4545-41D9-B7F7-461F04748DBD}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{854594B3-4545-41D9-B7F7-461F04748DBD}.Release|Any CPU.Build.0 = Release|Any CPU
+		{04562C5B-D503-4088-9FF7-4C80ED4B48BB}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{04562C5B-D503-4088-9FF7-4C80ED4B48BB}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{04562C5B-D503-4088-9FF7-4C80ED4B48BB}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{04562C5B-D503-4088-9FF7-4C80ED4B48BB}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

@@ -2,12 +2,14 @@
 using Microsoft.Data.SqlClient;
 using System;
 using System.Collections.Generic;
+using System.Diagnostics.CodeAnalysis;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
 namespace GestaoOficina.Infrastructure.Repositories
 {
+    [ExcludeFromCodeCoverage]
     public class BaseRepository
     {
         const string CONNECTION_STRING = "Server=localhost,1433;Database=GestaoOficina;User Id=sa;Password=1q2w3e4r@#$";

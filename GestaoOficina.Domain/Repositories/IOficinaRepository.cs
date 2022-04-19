@@ -9,5 +9,7 @@ namespace GestaoOficina.Domain.Repositories
     public interface IOficinaRepository
     {
         Task InserirOficina(Oficina oficina);
+        Task<int> ObterCargaOficina(Guid idOficina);
+        Task<Oficina> ObteroficinaPorCnpjESenha(string cnpj, string senha);
     }
 }

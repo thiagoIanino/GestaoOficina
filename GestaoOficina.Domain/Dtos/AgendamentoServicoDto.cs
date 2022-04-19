@@ -1,4 +1,5 @@
-﻿using System;
+﻿using GestaoOficina.Domain.Entities;
+using System;
 using System.Collections.Generic;
 using System.Diagnostics.CodeAnalysis;
 using System.Text;
@@ -6,9 +7,8 @@ using System.Text;
 namespace GestaoOficina.Domain.Dtos
 {
     [ExcludeFromCodeCoverage]
-    public class CapacidadeAgendamentoDto
+    public class AgendamentoServicoDto : Agendamento
     {
-        public DateTime Data { get; set; }
-        public int CargaDisponivel { get; set; }
+        public int CargaRequirida { get; set; }
     }
 }

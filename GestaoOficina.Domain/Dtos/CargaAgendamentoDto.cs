@@ -6,9 +6,9 @@ using System.Text;
 namespace GestaoOficina.Domain.Dtos
 {
     [ExcludeFromCodeCoverage]
-    public class CapacidadeAgendamentoDto
+    public class CargaAgendamentoDto
     {
-        public DateTime Data { get; set; }
-        public int CargaDisponivel { get; set; }
+        public int CargaOficina { get; set; }
+        public int CargaServico { get; set; }
     }
 }

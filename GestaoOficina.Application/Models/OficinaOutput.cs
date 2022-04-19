@@ -6,11 +6,11 @@ using System.Text;
 namespace GestaoOficina.Application.Models
 {
     [ExcludeFromCodeCoverage]
-    public class OficinaInput
+    public class OficinaOutput
     {
+        public Guid Id { get; set; }
         public string Nome { get; set; }
         public int Carga { get; set; }
-        public string Cnpj { get; set; }
-        public string Senha { get; set; }
+        public string Token { get; set; }
     }
 }

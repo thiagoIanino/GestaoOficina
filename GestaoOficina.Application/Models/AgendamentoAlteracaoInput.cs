@@ -7,10 +7,9 @@ using System.Text;
 namespace GestaoOficina.Application.Models
 {
     [ExcludeFromCodeCoverage]
-    public class Agendamentoinput
+    public class AgendamentoAlteracaoInput
     {
-        public DateTime DataAgendamento { get; set; }
-        public TipoServico TipoServico { get; set; }
-
+        public Guid IdAgendamento { get; set; }
+        public StatusAgendamento Status { get; set; }
     }
 }

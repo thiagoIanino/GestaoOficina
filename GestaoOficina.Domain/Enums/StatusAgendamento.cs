@@ -8,6 +8,7 @@ namespace GestaoOficina.Domain.Enums
     {
         Agendado = 1,
         Finalizado,
-        NaoRealizado
+        NaoRealizado,
+        EmAndamento
     }
 }
