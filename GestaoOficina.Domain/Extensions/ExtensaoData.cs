@@ -30,9 +30,9 @@ namespace GestaoOficina.Domain.Extensions
         public static bool EhValidaPeloLimite(this DateTime data)
         {
             if (data.AdicionarCincoDiasUteis() >= data.Date)
-                return true;
+                return false;
 
-            return false;
+            return true;
         }
 
         public static DateTime AdicionarCincoDiasUteis(this DateTime data)

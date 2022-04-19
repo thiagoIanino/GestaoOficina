@@ -51,9 +51,9 @@ namespace GestaoOficina.Api.Controllers
 
         [HttpDelete]
         [Authorize]
-        public async Task<IActionResult> ExcluirAgendamento(Guid idOficina)
+        public async Task<IActionResult> ExcluirAgendamento(Guid idAgendamento)
         {
-            await _agendamentoApplication.ExcluirAgendamento(idOficina);
+            await _agendamentoApplication.ExcluirAgendamento(idAgendamento);
             return Ok("Agendamento excluido com sucesso");
         }
     }

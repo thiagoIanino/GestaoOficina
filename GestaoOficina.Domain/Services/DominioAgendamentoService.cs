@@ -36,7 +36,7 @@ namespace GestaoOficina.Domain.Services
 
         public async Task ValidarDisponibilidadeDiaAgendamento(Guid idOficina, DateTime dataAgendamento, TipoServico tipoServico)
         {
-            if (!dataAgendamento.EhDiaUtil() && !dataAgendamento.EhValidaPeloLimite())
+            if (!dataAgendamento.EhDiaUtil() || !dataAgendamento.EhValidaPeloLimite())
                 throw new Exception("Data inválida para agendamento. Tente agendar para um dia útil com uma semana de antecedencia");
 
             try
@@ -112,7 +112,7 @@ namespace GestaoOficina.Domain.Services
                         IdAgendamento = historico.Id,
                         Servico = historico.Servico,
                         Status = historico.Status,
-                        DuracaoEmMinutos = (int)(historico.DataFim - historico.DataInicio).TotalMinutes
+                        DuracaoEmMinutos = historico.Status != StatusAgendamento.NaoRealizado? (int)(historico.DataFim - historico.DataInicio).TotalMinutes : 0
                     });
                 }
 
