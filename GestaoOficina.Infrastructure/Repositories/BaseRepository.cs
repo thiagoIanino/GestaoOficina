@@ -12,7 +12,7 @@ namespace GestaoOficina.Infrastructure.Repositories
     [ExcludeFromCodeCoverage]
     public class BaseRepository
     {
-        const string CONNECTION_STRING = "Server=localhost,1433;Database=GestaoOficina;User Id=sa;Password=1q2w3e4r@#$";
+        string CONNECTION_STRING = Environment.GetEnvironmentVariable("CONNECTION_STRING");
 
         protected async Task<IEnumerable<T>> ListarAsync<T>(string sqlCommand, object parms)
         {

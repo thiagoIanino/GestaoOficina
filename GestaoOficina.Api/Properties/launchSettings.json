@@ -15,7 +15,8 @@
       "launchUrl": "swagger",
       "environmentVariables": {
         "ASPNETCORE_ENVIRONMENT": "Development",
-        "SECRET_JWT": "3c65c9d5eba49253f5e831c30f31f64a"
+        "SECRET_JWT": "3c65c9d5eba49253f5e831c30f31f64a",
+        "CONNECTION_STRING": "Server=localhost,1433;Database=GestaoOficina;User Id=sa;Password=1q2w3e4r@#$"
       }
     },
     "Oficina.Api": {
