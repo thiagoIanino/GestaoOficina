@@ -18,12 +18,20 @@ namespace GestaoOficina.Tests.Domain
         private readonly Mock<IDominioAgendamentoService> _dominioAgendamentoService;
         private readonly Mock<ITokenRepository> _tokenRepository;
         private readonly IDominioOficinaService _dominioOficinaService;
+        private readonly Mock<IOficinaRepository>_oficinaRepository;
+        private readonly Mock<IHashService> _hashService;
         public DominioOficinaServiceTest()
         {
             _dominioAgendamentoService = new Mock<IDominioAgendamentoService>();
             _tokenRepository = new Mock<ITokenRepository>();
+            _oficinaRepository = new Mock<IOficinaRepository>();
+            _hashService = new Mock<IHashService>();
 
-            _dominioOficinaService = new DominioOficinaService(_dominioAgendamentoService.Object,_tokenRepository.Object);
+            _dominioOficinaService = new DominioOficinaService(
+                _dominioAgendamentoService.Object,
+                _tokenRepository.Object,
+                _oficinaRepository.Object,
+                _hashService.Object);
         }
 
         [Fact]

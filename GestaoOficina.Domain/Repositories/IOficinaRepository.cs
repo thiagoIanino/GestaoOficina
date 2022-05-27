@@ -10,6 +10,7 @@ namespace GestaoOficina.Domain.Repositories
     {
         Task InserirOficina(Oficina oficina);
         Task<int> ObterCargaOficina(Guid idOficina);
-        Task<Oficina> ObteroficinaPorCnpjESenha(string cnpj, string senha);
+        Task<Oficina> ObterOficinaPorCnpj(string cnpj);
+        Task AtualizarSenhaOficina(Oficina oficina);
     }
 }

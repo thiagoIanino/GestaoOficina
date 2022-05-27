@@ -19,7 +19,8 @@ namespace GestaoOficina.Infrastructure.Repositories
         }
 
         const string INSERIR_OFICINA_EXECUTE = "insert into Oficina (id,nome,carga,cnpj,senha) values (@id, @nome, @carga,@cnpj,@senha)";
-        const string OBTER_OFICINA_POR_CNPJ_E_SENHA_QUERY = "select id, nome, carga from Oficina where cnpj = @cnpj and senha = @senha";
+        const string ATUALIZAR_OFICINA_EXECUTE = "Update Oficina set senha = @senha where id = @id";
+        const string OBTER_OFICINA_POR_CNPJ_E_SENHA_QUERY = "select id, nome, carga, cnpj, senha from Oficina where cnpj = @cnpj";
         const string OBTER_CARGA_OFICINA_EXECUTE = "select carga from Oficina where id = @id";
 
         public async Task InserirOficina(Oficina oficina)
@@ -34,13 +35,21 @@ namespace GestaoOficina.Infrastructure.Repositories
 
             await ExecutarAsync(INSERIR_OFICINA_EXECUTE, parms);
         }
+        public async Task AtualizarSenhaOficina(Oficina oficina)
+        {
+            DynamicParameters parms = new DynamicParameters();
 
-        public async Task<Oficina> ObteroficinaPorCnpjESenha(string cnpj, string senha)
+            parms.Add("@id", oficina.Id, DbType.Guid);
+            parms.Add("@senha", oficina.Senha, DbType.AnsiString);
+
+            await ExecutarAsync(ATUALIZAR_OFICINA_EXECUTE, parms);
+        }
+
+        public async Task<Oficina> ObterOficinaPorCnpj(string cnpj)
         {
             DynamicParameters parametros = new DynamicParameters();
             // ansiString == varchar / ansiStringfixedLength == char
             parametros.Add("@cnpj", cnpj, DbType.AnsiStringFixedLength);
-            parametros.Add("@senha", senha, DbType.AnsiString);
 
             return await ObterAsync<Oficina>(OBTER_OFICINA_POR_CNPJ_E_SENHA_QUERY, parametros);
         }

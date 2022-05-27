@@ -7,6 +7,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using System.Threading.Tasks;
 
 namespace GestaoOficina.Domain.Services
 {
@@ -14,15 +15,19 @@ namespace GestaoOficina.Domain.Services
     {
         private readonly IDominioAgendamentoService _dominioAgendamentoService;
         private readonly ITokenRepository _tokenRepository;
-        public DominioOficinaService(IDominioAgendamentoService dominioAgendamentoService, ITokenRepository tokenRepository)
+        private readonly IOficinaRepository _oficinaRepository;
+        private readonly IHashService _hashService;
+        public DominioOficinaService(IDominioAgendamentoService dominioAgendamentoService, ITokenRepository tokenRepository, IOficinaRepository oficinaRepository, IHashService hashService)
         {
             _dominioAgendamentoService = dominioAgendamentoService;
             _tokenRepository = tokenRepository;
+            _oficinaRepository = oficinaRepository;
+            _hashService = hashService;
         }
 
-        public void ValidarDadosAutenticacao( string cnpj, string senha)
+        public void ValidarDadosAutenticacao(string cnpj, string senha)
         {
-             if (string.IsNullOrWhiteSpace(cnpj) || cnpj?.Length != 14)
+            if (string.IsNullOrWhiteSpace(cnpj) || cnpj?.Length != 14)
                 throw new ArgumentNullException(nameof(cnpj));
             else if (string.IsNullOrWhiteSpace(senha))
                 throw new ArgumentNullException(nameof(senha));
@@ -38,13 +43,16 @@ namespace GestaoOficina.Domain.Services
             else if (string.IsNullOrWhiteSpace(senha))
                 throw new ArgumentNullException(nameof(senha));
         }
-        public string AutenticarOficina(Oficina oficina)
+        public string GerarTokenAutenticacao(Oficina oficina)
         {
-            if (oficina is null)
-            {
-                throw new Exception("Email ou senha incorretos");
-            }
-            return _tokenRepository.GenerateToken( oficina.Id);
+            return _tokenRepository.GenerateToken(oficina.Id);
+        }
+
+        public async Task AutenticarOficina(Oficina oficina, Oficina oficinaConsultada)
+        {
+            if (oficinaConsultada is null || !(await _hashService.ValidaEAtualizaHashAsync(oficina, oficinaConsultada.Senha)))
+            throw new Exception("Usuario não encontrado");
+
         }
 
         public DateTime CalcularDataLimite(DateTime dataLimite)

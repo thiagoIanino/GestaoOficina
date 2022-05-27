@@ -17,25 +17,34 @@ namespace GestaoOficina.Application
         private readonly IOficinaRepository _oficinaRepository;
         private readonly IAgendamentoRepository _agendamentoRepository;
         private readonly IContextoRepository _contextoService;
+        private readonly IHashService _serviceHashService;
 
         public OficinaApplication(
             IDominioOficinaService dominioOficinaService,
             IOficinaRepository oficinaRepository,
             IAgendamentoRepository agendamentoRepository,
-            IContextoRepository contextoService)
+            IContextoRepository contextoService,
+            IHashService serviceHashService)
         {
             _dominioOficinaService = dominioOficinaService;
             _oficinaRepository = oficinaRepository;
             _agendamentoRepository = agendamentoRepository;
             _contextoService = contextoService;
+            _serviceHashService = serviceHashService;
         }
 
         public async Task<OficinaOutput> AutenticarOficina(OficinaAutenticacaoInput oficinaInput)
         {
             _dominioOficinaService.ValidarDadosAutenticacao(oficinaInput.Cnpj, oficinaInput.Senha);
 
-            var oficina = await _oficinaRepository.ObteroficinaPorCnpjESenha(oficinaInput.Cnpj, oficinaInput.Senha);
-            var token = _dominioOficinaService.AutenticarOficina(oficina);
+            var oficinaConsulta = await _oficinaRepository.ObterOficinaPorCnpj(oficinaInput.Cnpj);
+            var oficina = new Oficina
+            {
+                Cnpj = oficinaInput.Cnpj,
+                Senha = oficinaInput.Senha
+            };
+            await _dominioOficinaService.AutenticarOficina(oficina,oficinaConsulta);
+            var token = _dominioOficinaService.GerarTokenAutenticacao(oficina);
 
             return new OficinaOutput
             {
@@ -57,7 +66,11 @@ namespace GestaoOficina.Application
                 oficinaInput.Senha
                 );
 
+            var hashSenha = _serviceHashService.GerarHash(oficina);
+            oficina.Senha = hashSenha;
+
             await _oficinaRepository.InserirOficina(oficina);
+            oficina.Senha = null;
 
             return oficina;
         }

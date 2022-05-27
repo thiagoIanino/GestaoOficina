@@ -1,5 +1,6 @@
 ﻿using GestaoOficina.Domain.Interfaces;
 using GestaoOficina.Domain.Services;
+using GestaoOficina.Infrastructure.Services;
 using Microsoft.Extensions.DependencyInjection;
 using System;
 using System.Collections.Generic;
@@ -15,6 +16,7 @@ namespace GestaoOficina.CrossCutting.IoC
         {
             services.AddScoped<IDominioOficinaService, DominioOficinaService>();
             services.AddScoped<IDominioAgendamentoService, DominioAgendamentoService>();
+            services.AddScoped<IHashService, HashService>();
         }
     }
 }
